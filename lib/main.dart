@@ -1,4 +1,5 @@
 import 'package:chat_app_flutter/views/login.dart';
+import 'package:chat_app_flutter/views/register.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -12,7 +13,7 @@ class ChatApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData.dark(),
-      home: LogIn(),
+      home: Register(),
     );
   }
 }
