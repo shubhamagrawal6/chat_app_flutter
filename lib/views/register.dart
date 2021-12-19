@@ -1,6 +1,8 @@
 import 'package:chat_app_flutter/services/auth.dart';
+import 'package:chat_app_flutter/views/login.dart';
 import 'package:chat_app_flutter/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'contacts.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -27,6 +29,11 @@ class _RegisterState extends State<Register> {
         password: passwordTEController.text,
       ).then((value) {
         print("$value");
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => Contacts()),
+        );
       });
     }
   }
@@ -154,7 +161,12 @@ class _RegisterState extends State<Register> {
                         ),
                         SizedBox(width: 5),
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) => LogIn()),
+                            );
+                          },
                           style: ButtonStyle(
                             visualDensity: VisualDensity.compact,
                             textStyle: MaterialStateProperty.all(

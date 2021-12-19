@@ -1,10 +1,9 @@
+import 'package:chat_app_flutter/main.dart';
 import 'package:chat_app_flutter/model/localUser.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 class Auth {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
   LocalUser? _localUserFromFirebase(User? firebaseUser) {
     return firebaseUser != null
@@ -12,8 +11,10 @@ class Auth {
         : null;
   }
 
-  Future logInWithEmail(
-      {required String email, required String password}) async {
+  Future logInWithEmail({
+    required String email,
+    required String password,
+  }) async {
     try {
       UserCredential result = await _auth.signInWithEmailAndPassword(
         email: email,
