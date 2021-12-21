@@ -1,4 +1,5 @@
 import 'package:chat_app_flutter/services/auth.dart';
+import 'package:chat_app_flutter/services/database.dart';
 import 'package:chat_app_flutter/views/login.dart';
 import 'package:chat_app_flutter/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -13,12 +14,19 @@ class _RegisterState extends State<Register> {
   bool isLoading = false;
   final formKey = GlobalKey<FormState>();
   Auth auth = new Auth();
+  Database database = new Database();
   TextEditingController usernameTEController = new TextEditingController();
   TextEditingController emailTEController = new TextEditingController();
   TextEditingController passwordTEController = new TextEditingController();
   TextEditingController confirmPassTEController = new TextEditingController();
 
   registerValidator() {
+    Map<String, String> userMap = {
+      "name": usernameTEController.text,
+      "email": emailTEController.text,
+    };
+    database.uploadUserInfo(userMap: userMap);
+
     if (formKey.currentState!.validate()) {
       setState(() {
         isLoading = true;
