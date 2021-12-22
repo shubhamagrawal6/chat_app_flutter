@@ -12,5 +12,14 @@ class Database {
 
   uploadUserInfo({required userMap}) {
     FirebaseFirestore.instance.collection("users").add(userMap);
+    print(userMap);
+  }
+
+  createChatRoom({required String chatRoomId, required chatRoomMap}) {
+    FirebaseFirestore.instance
+        .collection("ChatRoom")
+        .doc(chatRoomId)
+        .set(chatRoomMap)
+        .catchError((e) => print(e));
   }
 }

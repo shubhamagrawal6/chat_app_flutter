@@ -25,6 +25,7 @@ class _RegisterState extends State<Register> {
       "name": usernameTEController.text,
       "email": emailTEController.text,
     };
+
     database.uploadUserInfo(userMap: userMap);
 
     if (formKey.currentState!.validate()) {

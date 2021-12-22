@@ -25,9 +25,15 @@ class _SearchState extends State<Search> {
     });
   }
 
+  createChatAndRedirect({required String username}) {
+    List<String> users = [username];
+    database.createChatRoom(chatRoomId: "", chatRoomMap: users);
+  }
+
   Widget searchList() {
     return searchSnapshot != null
         ? ListView.builder(
+            shrinkWrap: true,
             itemCount: searchSnapshot!.docs.length,
             itemBuilder: (context, index) => SearchTile(
               username: searchSnapshot!.docs[index].get("name"),
@@ -41,7 +47,7 @@ class _SearchState extends State<Search> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBarMain(context),
-      body: Container(
+      body: SingleChildScrollView(
         child: Column(
           children: [
             Container(
@@ -63,6 +69,7 @@ class _SearchState extends State<Search> {
                 ],
               ),
             ),
+            SizedBox(height: 10),
             searchList(),
           ],
         ),
@@ -79,26 +86,33 @@ class SearchTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(border: Border.all(color: Colors.white54)),
+      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 username,
-                style: TextStyle(color: Colors.white54),
+                style: TextStyle(color: Colors.white, fontSize: 12),
+                overflow: TextOverflow.fade,
+                maxLines: 1,
               ),
               Text(
                 email,
-                style: TextStyle(color: Colors.white54),
+                style: TextStyle(color: Colors.white, fontSize: 12),
+                overflow: TextOverflow.fade,
+                maxLines: 1,
               ),
             ],
           ),
-          Spacer(),
           ElevatedButton(
             onPressed: () {},
             style: ButtonStyle(
               padding: MaterialStateProperty.all(
-                EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                EdgeInsets.symmetric(horizontal: 15, vertical: 15),
               ),
               shape: MaterialStateProperty.all(
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
@@ -107,7 +121,7 @@ class SearchTile extends StatelessWidget {
             ),
             child: Text(
               "Messsage",
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: Colors.white, fontSize: 16),
             ),
           ),
         ],
