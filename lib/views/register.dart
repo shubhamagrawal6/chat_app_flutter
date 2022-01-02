@@ -21,14 +21,15 @@ class _RegisterState extends State<Register> {
   TextEditingController confirmPassTEController = new TextEditingController();
 
   registerValidator() {
-    Map<String, String> userMap = {
-      "name": usernameTEController.text,
-      "email": emailTEController.text,
-    };
-
-    database.uploadUserInfo(userMap: userMap);
-
     if (formKey.currentState!.validate()) {
+      Map<String, String> userMap = {
+        "name": usernameTEController.text,
+        "email": emailTEController.text,
+      };
+
+      SharedPrefUtil.setUserName(username: usernameTEController.text);
+      SharedPrefUtil.setUserEmail(userEmail: emailTEController.text);
+
       setState(() {
         isLoading = true;
       });
@@ -38,6 +39,9 @@ class _RegisterState extends State<Register> {
         password: passwordTEController.text,
       ).then((value) {
         print("$value");
+
+        database.uploadUserInfo(userMap: userMap);
+        SharedPrefUtil.setUserLoggedIn(isLoggedIn: true);
 
         Navigator.pushReplacement(
           context,

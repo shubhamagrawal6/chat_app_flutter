@@ -1,4 +1,5 @@
 import 'package:chat_app_flutter/services/auth.dart';
+import 'package:chat_app_flutter/services/database.dart';
 import 'package:chat_app_flutter/views/register.dart';
 import 'package:chat_app_flutter/widgets/widgets.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,11 +16,19 @@ class _LogInState extends State<LogIn> {
   bool isLoading = false;
   final formKey = GlobalKey<FormState>();
   Auth auth = new Auth();
+  Database database = new Database();
   TextEditingController emailTEController = new TextEditingController();
   TextEditingController passwordTEController = new TextEditingController();
 
   logInValidator() {
     if (formKey.currentState!.validate()) {
+      SharedPrefUtil.setUserEmail(userEmail: emailTEController.text);
+      database.getUsersByEmail(email: emailTEController.text).then((value) {
+        SharedPrefUtil.setUserName(
+          username: value.docs.first.get("name").toString(),
+        );
+      });
+
       setState(() {
         isLoading = true;
       });
@@ -30,12 +39,14 @@ class _LogInState extends State<LogIn> {
         password: passwordTEController.text,
       )
           .then((value) {
-        print("$value");
+        if (value != null) {
+          SharedPrefUtil.setUserLoggedIn(isLoggedIn: true);
 
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => Contacts()),
-        );
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => Contacts()),
+          );
+        }
       });
     }
   }

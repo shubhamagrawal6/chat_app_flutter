@@ -10,6 +10,15 @@ class Database {
         .get();
   }
 
+  Future<QuerySnapshot<Map<String, dynamic>>> getUsersByEmail({
+    required String email,
+  }) async {
+    return await FirebaseFirestore.instance
+        .collection("users")
+        .where("email", isEqualTo: email)
+        .get();
+  }
+
   uploadUserInfo({required userMap}) {
     FirebaseFirestore.instance.collection("users").add(userMap);
     print(userMap);
