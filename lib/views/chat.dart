@@ -48,25 +48,29 @@ class _ChatState extends State<Chat> {
   }
 
   Widget ChatMessageList() {
-    return StreamBuilder<QuerySnapshot>(
-      stream: chatMsgStream,
-      builder: (context, AsyncSnapshot snapshot) {
-        return snapshot.hasData
-            ? ListView.builder(
-                itemCount: snapshot.data.docs.length,
-                itemBuilder: (context, index) {
-                  return MessageTile(
-                    message: snapshot.data.docs.elementAt(index).get("message"),
-                    sentByMe:
-                        (snapshot.data.docs.elementAt(index).get("sentBy") ==
-                            Constants.myName),
-                    timeStamp:
-                        snapshot.data.docs.elementAt(index).get("timeStamp"),
-                  );
-                },
-              )
-            : Center(child: CircularProgressIndicator());
-      },
+    return Container(
+      padding: EdgeInsets.only(bottom: 80),
+      child: StreamBuilder<QuerySnapshot>(
+        stream: chatMsgStream,
+        builder: (context, AsyncSnapshot snapshot) {
+          return snapshot.hasData
+              ? ListView.builder(
+                  itemCount: snapshot.data.docs.length,
+                  itemBuilder: (context, index) {
+                    return MessageTile(
+                      message:
+                          snapshot.data.docs.elementAt(index).get("message"),
+                      sentByMe:
+                          (snapshot.data.docs.elementAt(index).get("sentBy") ==
+                              Constants.myName),
+                      timeStamp:
+                          snapshot.data.docs.elementAt(index).get("timeStamp"),
+                    );
+                  },
+                )
+              : Center(child: CircularProgressIndicator());
+        },
+      ),
     );
   }
 
