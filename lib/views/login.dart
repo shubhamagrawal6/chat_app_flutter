@@ -8,6 +8,9 @@ import 'package:flutter/services.dart';
 import 'contacts.dart';
 
 class LogIn extends StatefulWidget {
+  final Auth auth;
+  LogIn({required this.auth});
+
   @override
   _LogInState createState() => _LogInState();
 }
@@ -15,7 +18,7 @@ class LogIn extends StatefulWidget {
 class _LogInState extends State<LogIn> {
   bool isLoading = false;
   final formKey = GlobalKey<FormState>();
-  Auth auth = new Auth();
+  late Auth auth = widget.auth;
   Database database = new Database();
   TextEditingController emailTEController = new TextEditingController();
   TextEditingController passwordTEController = new TextEditingController();
@@ -44,7 +47,7 @@ class _LogInState extends State<LogIn> {
 
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => Contacts()),
+            MaterialPageRoute(builder: (context) => Contacts(auth: auth)),
           );
         }
       });
@@ -168,7 +171,7 @@ class _LogInState extends State<LogIn> {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => Register(),
+                                builder: (context) => Register(auth: auth),
                               ),
                             );
                           },

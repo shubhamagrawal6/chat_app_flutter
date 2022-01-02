@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'contacts.dart';
 
 class Register extends StatefulWidget {
+  final Auth auth;
+  Register({required this.auth});
+
   @override
   _RegisterState createState() => _RegisterState();
 }
@@ -13,7 +16,7 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   bool isLoading = false;
   final formKey = GlobalKey<FormState>();
-  Auth auth = new Auth();
+  late Auth auth = widget.auth;
   Database database = new Database();
   TextEditingController usernameTEController = new TextEditingController();
   TextEditingController emailTEController = new TextEditingController();
@@ -45,7 +48,7 @@ class _RegisterState extends State<Register> {
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => Contacts()),
+          MaterialPageRoute(builder: (context) => Contacts(auth: auth)),
         );
       });
     }
@@ -177,7 +180,8 @@ class _RegisterState extends State<Register> {
                           onPressed: () {
                             Navigator.pushReplacement(
                               context,
-                              MaterialPageRoute(builder: (context) => LogIn()),
+                              MaterialPageRoute(
+                                  builder: (context) => LogIn(auth: auth)),
                             );
                           },
                           style: ButtonStyle(

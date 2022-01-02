@@ -29,6 +29,30 @@ class Database {
         .collection("ChatRoom")
         .doc(chatRoomId)
         .set(chatRoomMap)
-        .catchError((e) => print(e));
+        .catchError((e) => print(e.toString()));
+  }
+
+  sendMessage({required String chatRoomId, required messageMap}) {
+    FirebaseFirestore.instance
+        .collection("ChatRoom")
+        .doc(chatRoomId)
+        .collection("Chats")
+        .add(messageMap);
+  }
+
+  getChats({required String chatRoomId}) async {
+    return await FirebaseFirestore.instance
+        .collection("ChatRoom")
+        .doc(chatRoomId)
+        .collection("Chats")
+        .orderBy("timeStamp", descending: false)
+        .snapshots();
+  }
+
+  getContacts({required String username}) async {
+    return await FirebaseFirestore.instance
+        .collection("ChatRoom")
+        .where("users", arrayContains: username)
+        .snapshots();
   }
 }

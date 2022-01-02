@@ -1,4 +1,6 @@
+import 'package:chat_app_flutter/constants.dart';
 import 'package:chat_app_flutter/services/database.dart';
+import 'package:chat_app_flutter/views/chat.dart';
 import 'package:chat_app_flutter/widgets/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -23,11 +25,6 @@ class _SearchState extends State<Search> {
         searchSnapshot = val;
       });
     });
-  }
-
-  createChatAndRedirect({required String username}) {
-    List<String> users = [username];
-    database.createChatRoom(chatRoomId: "", chatRoomMap: users);
   }
 
   Widget searchList() {
@@ -83,6 +80,32 @@ class SearchTile extends StatelessWidget {
   final String email;
   SearchTile({required this.username, required this.email});
 
+  createChatAndRedirect({
+    required BuildContext context,
+    required String username,
+  }) {
+    List<String> users = [username, Constants.myName];
+
+    String chatRoomId = getChatRoomId(users: users);
+
+    Map<String, dynamic> chatRoomMap = {
+      "users": users,
+      "chatRoomId": chatRoomId,
+    };
+
+    Database().createChatRoom(chatRoomId: chatRoomId, chatRoomMap: chatRoomMap);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Chat(
+          chatRoomId: chatRoomId,
+          username: username,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -109,7 +132,10 @@ class SearchTile extends StatelessWidget {
             ],
           ),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () => createChatAndRedirect(
+              context: context,
+              username: username,
+            ),
             style: ButtonStyle(
               padding: MaterialStateProperty.all(
                 EdgeInsets.symmetric(horizontal: 15, vertical: 15),
@@ -127,5 +153,20 @@ class SearchTile extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+String getChatRoomId({required List<String> users}) {
+  String a = users[0], b = users[1];
+  if (a.length > b.length) {
+    return "$a\_$b";
+  } else if (a.length < b.length) {
+    return "$b\_$a";
+  } else {
+    if (a.compareTo(b) > 0) {
+      return "$b\_$a";
+    } else {
+      return "$a\_$b";
+    }
   }
 }

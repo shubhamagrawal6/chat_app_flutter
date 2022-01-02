@@ -1,9 +1,11 @@
-import 'package:chat_app_flutter/main.dart';
 import 'package:chat_app_flutter/model/localUser.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Auth {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth auth;
+  Auth({required this.auth});
+
+  Stream<User?> get user => auth.authStateChanges();
 
   LocalUser? _localUserFromFirebase(User? firebaseUser) {
     return firebaseUser != null
@@ -16,7 +18,7 @@ class Auth {
     required String password,
   }) async {
     try {
-      UserCredential result = await _auth.signInWithEmailAndPassword(
+      UserCredential result = await auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -30,7 +32,7 @@ class Auth {
   Future RegisterWithEmail(
       {required String email, required String password}) async {
     try {
-      UserCredential result = await _auth.createUserWithEmailAndPassword(
+      UserCredential result = await auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -43,7 +45,7 @@ class Auth {
 
   Future resetPassword({required String email}) async {
     try {
-      return await _auth.sendPasswordResetEmail(email: email);
+      return await auth.sendPasswordResetEmail(email: email);
     } catch (e) {
       print(e.toString());
     }
@@ -51,7 +53,7 @@ class Auth {
 
   Future signOut() async {
     try {
-      return await _auth.signOut();
+      return await auth.signOut();
     } catch (e) {
       print(e.toString());
     }
